@@ -7,4 +7,5 @@ def test_guest_can_go_to_login_page(browser):
     main_page = MainPage(browser, link)
     main_page.open()
     main_page.go_to_login_page()
+    main_page.should_be_login_link()
 
