@@ -31,11 +31,4 @@ def browser(request):
     yield browser
     print("\nquit browser..")
     browser.quit()
-
-
-def on_form(browser, selector):
-    try:
-        WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
-        return True
-    except Exception:
-        return False
+    
