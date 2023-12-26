@@ -14,5 +14,6 @@ class ProductPageLocators:
     ADD_TO_CART_BUTTON = (By.CSS_SELECTOR, '.btn-add-to-basket')
     GOOD_ACTUAL_NAME = (By.CSS_SELECTOR, '.product_main>h1')
     GOOD_ACTUAL_PRICE = (By.CSS_SELECTOR, '.product_main>p')
+    SUCCESS_MESSAGE = (By.CSS_SELECTOR, '#messages>div:first-child')
     ADDED_GOOD_NAME = (By.CSS_SELECTOR, '#messages>div:first-child strong')
     ADDED_GOOD_PRICE = (By.CSS_SELECTOR, '#messages>div:last-child strong')

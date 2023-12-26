@@ -23,3 +23,11 @@ class ProductPage(BasePage):
         product_price_in_cart = self.get_text(*ProductPageLocators.ADDED_GOOD_PRICE)
         assert actual_product_price == product_price_in_cart, \
             'Actual product price is no equal to cart sum'
+
+    def should_not_be_success_message(self, timeout=1):
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE, timeout=timeout), \
+            "Success message is presented, but should not be"
+
+    def should_be_disappeared_success_message(self, timeout=1):
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE, timeout=timeout), \
+            "Success message should disappear, but it's still there"
