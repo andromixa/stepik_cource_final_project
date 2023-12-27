@@ -25,9 +25,9 @@ class BasePage:
     def open(self):
         self.browser.get(self.url)
 
-    def is_element_present(self, how, what):
+    def is_element_present(self, how, what, timeout=4):
         try:
-            self.browser.find_element(how, what)
+            WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
         except NoSuchElementException:
             return False
         return True
@@ -55,16 +55,20 @@ class BasePage:
         else:
             return text_container.text
 
-    def solve_quiz_and_get_code(self):
-        alert = self.browser.switch_to.alert
-        x = alert.text.split(" ")[2]
-        answer = str(math.log(abs((12 * math.sin(float(x))))))
-        alert.send_keys(answer)
-        alert.accept()
+    def send_text(self, how, what, text):
         try:
-            alert = self.browser.switch_to.alert
-            alert_text = alert.text
-            print(f"Your code: {alert_text}")
-            alert.accept()
-        except NoAlertPresentException:
-            print("No second alert presented")
+            text_input = self.browser.find_element(how, what)
+            text_input.send_keys(text)
+        except NoSuchElementException:
+            print(f'No element with such selector: {what}')
+
+    def element_click(self, how, what):
+        try:
+            clickable_element = self.browser.find_element(how, what)
+            clickable_element.click()
+        except NoSuchElementException:
+            print(f'No element with such selector: {what}')
+
+    def should_be_authorized_user(self):
+        assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented," \
+                                                                     " probably unauthorised user"
