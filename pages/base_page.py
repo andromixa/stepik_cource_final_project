@@ -1,4 +1,8 @@
-from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException, TimeoutException
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    NoAlertPresentException,
+    TimeoutException,
+)
 import math
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -20,29 +24,36 @@ class BasePage:
         button.click()
 
     def should_be_login_link(self):
-        assert self.is_element_present(*BasePageLocators.LOGIN_LINK), "Login link is not presented"
+        assert self.is_element_present(
+            *BasePageLocators.LOGIN_LINK
+        ), "Login link is not presented"
 
     def open(self):
         self.browser.get(self.url)
 
     def is_element_present(self, how, what, timeout=4):
         try:
-            WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
+            WebDriverWait(self.browser, timeout).until(
+                EC.presence_of_element_located((how, what))
+            )
         except NoSuchElementException:
             return False
         return True
 
     def is_not_element_present(self, how, what, timeout=4):
         try:
-            WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
+            WebDriverWait(self.browser, timeout).until(
+                EC.presence_of_element_located((how, what))
+            )
         except TimeoutException:
             return True
         return False
 
     def is_disappeared(self, how, what, timeout=4):
         try:
-            WebDriverWait(self.browser, timeout, 1, TimeoutException). \
-                until_not(EC.presence_of_element_located((how, what)))
+            WebDriverWait(self.browser, timeout, 1, TimeoutException).until_not(
+                EC.presence_of_element_located((how, what))
+            )
         except TimeoutException:
             return False
         return True
@@ -51,7 +62,7 @@ class BasePage:
         try:
             text_container = self.browser.find_element(how, what)
         except NoSuchElementException:
-            print(f'No element with such selector: {what}')
+            print(f"No element with such selector: {what}")
         else:
             return text_container.text
 
@@ -60,15 +71,26 @@ class BasePage:
             text_input = self.browser.find_element(how, what)
             text_input.send_keys(text)
         except NoSuchElementException:
-            print(f'No element with such selector: {what}')
+            print(f"No element with such selector: {what}")
 
     def element_click(self, how, what):
         try:
             clickable_element = self.browser.find_element(how, what)
             clickable_element.click()
         except NoSuchElementException:
-            print(f'No element with such selector: {what}')
+            print(f"No element with such selector: {what}")
 
     def should_be_authorized_user(self):
-        assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented," \
-                                                                     " probably unauthorised user"
+        assert self.is_element_present(
+            *BasePageLocators.USER_ICON
+        ), "User icon is not presented, probably unauthorised user"
+
+    def solve_quiz_and_get_code(self):
+        try:
+            alert = self.browser.switch_to.alert
+            x = alert.text.split(" ")[2]
+            answer = str(math.log(abs((12 * math.sin(float(x))))))
+            alert.send_keys(answer)
+            alert.accept()
+        except NoAlertPresentException:
+            pass
